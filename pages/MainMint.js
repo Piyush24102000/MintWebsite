@@ -7,6 +7,7 @@ export default function MainMint({ accounts, setAccounts }) {
     const [mintAmount, setMintAmount] = useState(1);
     const isConnected = Boolean(accounts[0]);
 
+  
     async function handleMint() {
         if (window.ethereum) {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -14,7 +15,10 @@ export default function MainMint({ accounts, setAccounts }) {
             const contract = new ethers.Contract(address, abi, signer);
 
             try {
-            await contract.mint(BigNumber.from(mintAmount),{value:ethers.utils.parseEther((0.02 * mintAmount).toString())});
+                await contract.mint(BigNumber.from(mintAmount), {
+                    gasLimit: 100000,
+                    value: ethers.utils.parseEther((0.02 * mintAmount).toString())
+                });
             } catch (error) {
                 console.log(error);
             }
